@@ -1,0 +1,88 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Getopt::Std;
+use Term::ANSIColor;
+
+=head1 NAME
+
+App::Sep - inserts a separator between records where given portion of records change.
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+=head1 SYNOPSIS
+
+usage:
+  -e REGEX
+  -s SEP
+  -r REC_SEP
+
+  sep FILE FILE ...
+  ls | sep
+
+note:
+
+  The default regex is '[\S]+'
+
+=cut
+
+sub is_piped {
+  return not -t *STDOUT;
+}
+
+my %opts;
+getopts('s:r:e:', \%opts);
+
+my $colors_enabled = not is_piped();
+
+my $regex   = ($opts{'e'} or '[\S]+');
+my $sep     = ($opts{'s'} or "\0");
+my $rec_sep = ($opts{'r'} or $/);
+
+my $prev_line = '';
+my $i = 0;
+my @colours = ('cyan', '');
+my $colour = 0;
+
+while(<>) {
+  my $to_print = $_;
+  if("${prev_line}${_}" =~ m/(^$regex)([^${rec_sep}]*)${rec_sep}(?!\1)/s ) {
+    print $sep if($i > 0);
+    $colour = ($colour + 1) % ($#colours+1);
+  } else {
+    if($i == 0) {
+      $to_print = $prev_line;
+    }
+  }
+  $to_print = colored($to_print, $colours[$colour]) if($colors_enabled);
+  print $to_print;
+} continue {
+  $prev_line = $_;
+  $i++;
+}
+
+=head1 AUTHOR
+
+Sina Siadat, C<< <siadat at gmail dot com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to the issue list at Github: L<http://github.com/sinas/lld/issues>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2011 Sina Siadat.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
+=cut
+1;
