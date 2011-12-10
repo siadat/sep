@@ -1,9 +1,11 @@
 SEP
 ===
 
-Inserted seperator between groups of records.
+Insert seperators between groups of records.
 
-A records group is all consequent records that have identical first word, or any given regex pattern match.
+A group of records are all adjacent records that have an identical portion defined by a regex.
+
+The default regex matches the first word.
 
 Record groups are coloured in zebra pattern style.
 
