@@ -31,9 +31,6 @@ note:
 
 =cut
 
-sub is_piped {
-  return not -t *STDOUT;
-}
 
 my %opts;
 getopts('s:r:e:', \%opts);
@@ -63,6 +60,10 @@ while(<>) {
 } continue {
   $prev_line = $_;
   $i++;
+}
+
+sub is_piped {
+  return not -t *STDOUT;
 }
 
 =head1 AUTHOR
