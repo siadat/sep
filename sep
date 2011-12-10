@@ -43,7 +43,7 @@ my $rec_sep = ($opts{'r'} or $/);
 
 my $prev_line = '';
 my @colours = ('cyan', '');
-my ($c, $i) = (0, 0);
+my ($current_colour, $i) = (0, 0);
 
 $/ = $rec_sep;
 
@@ -51,11 +51,11 @@ while(<>) {
   my $to_print = $_;
   if("${prev_line}${_}" =~ m/(^$regex)([^${rec_sep}]*)${rec_sep}(?!\1)/s ) {
     print $sep if($i > 0);
-    $c = ($c + 1) % ($#colours+1);
+    $current_colour = ($current_colour+1) % ($#colours+1);
   } else {
     $to_print = $prev_line if($i == 0);
   }
-  $to_print = colored($to_print, $colours[$c]) if($colors_enabled);
+  $to_print = colored($to_print, $colours[$current_colour]) if($colors_enabled);
   print $to_print;
 } continue {
   $prev_line = $_;
