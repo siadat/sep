@@ -49,6 +49,8 @@ my $i = 0;
 my @colours = ('cyan', '');
 my $colour = 0;
 
+$/ = $rec_sep;
+
 while(<>) {
   my $to_print = $_;
   if("${prev_line}${_}" =~ m/(^$regex)([^${rec_sep}]*)${rec_sep}(?!\1)/s ) {
