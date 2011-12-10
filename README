@@ -3,11 +3,11 @@ SEP
 
 Insert seperators between groups of records.
 
-A group of records are all adjacent records that have an identical portion defined by a regex.
-
-The default regex matches the first word.
+A group of records is all adjacent records that have an identical portion which is defined by a REGEX.
 
 Record groups are coloured in zebra pattern style.
+
+The default REGEX matches the first word in each record.
 
 I love Perl.
 
