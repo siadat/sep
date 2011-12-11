@@ -47,17 +47,25 @@ my ($current_colour, $i) = (0, 0);
 
 $/ = $rec_sep;
 
+my ($last_matched, $this_matched) = (0, 0);
+
 while(<>) {
   my $to_print = $_;
-  if("${prev_line}${_}" =~ m/(^$regex)([^${rec_sep}]*)${rec_sep}(?!\1)/s ) {
+
+  $this_matched = (${_} =~ m/^$regex/s);
+
+  if(($last_matched xor $this_matched) or "${prev_line}${_}" =~ m/(^$regex)([^${rec_sep}]*)${rec_sep}(?!\1)/s ) {
     print $sep if($i > 0);
     $current_colour = ($current_colour+1) % ($#colours+1);
   } else {
     $to_print = $prev_line if($i == 0);
   }
+
   $to_print = colored($to_print, $colours[$current_colour]) if($colors_enabled);
   print $to_print;
+
 } continue {
+  $last_matched = $this_matched;
   $prev_line = $_;
   $i++;
 }
